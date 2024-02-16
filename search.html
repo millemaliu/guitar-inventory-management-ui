@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+	<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<title>Guitar Inventory - About</title>
+        <link rel="stylesheet" href="/index.css">
+    </head>
+
+    <body>
+
+        <table class = "nav">
+            <tbody>
+                <tr>
+                    <td><a class="heading" href="./index.html">Guitar Inventory Management</a></td>
+                    <td><div class = "nav-left">
+                        <a class="nav-button" href="./about.html">About</a>
+                        <a class="nav-button" href="./add-guitar.html">Add</a>
+                        <a class="nav-button" href="./search.html">Search</a>
+                    </div></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <div class ="center">
+            <form>
+                
+                <label>Builder: </label>
+                <input id="builder" /><br />
+                <label>Model: </label>
+                <input id="model"/><br />
+                <label>Type: </label>
+                <input id="type" /><br />
+                <label>Backwood: </label>
+                <input id="topwood"/><br />
+                <label>Topwood: </label>
+                <input id="backwood"/><br />
+                <button onclick="search()">Search</button>
+            </form>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                <td>Serial Number</td> <td>Builder</td><td>Model</td>
+                <td>Type</td><td>Back wood</td> <td>Top Wood</td>
+                </tr>
+            </thead>
+            <tbody id="results">
+
+            </tbody>
+            
+
+        </table>
+            
+
+        <script>
+            let guitars = [
+                {
+                    id: "1", 
+                    price: "50.00",
+                    builder: "Fender",
+                    model: "Lightening",
+                    type: "acoustic",
+                    topwood: "Mahogany",
+                    backwood: "Maple"},
+                {
+                    id: "2", 
+                    price: "55.00",
+                    builder: "Gibson",
+                    model: "Pretty",
+                    type: "acoustic",
+                    topwood: "Cocobolo",
+                    backwood: "Maple"},
+                {
+                    id: "3", 
+                    price: "60.00",
+                    builder: "Fender",
+                    model: "Crisis",
+                    type: "acoustic",
+                    topwood: "Alder",
+                    backwood: "Cocobolo"},
+                {
+                    id: "4", 
+                    price: "70.00",
+                    builder: "Gibson",
+                    model: "Sleeper",
+                    type: "electric",
+                    topwood: "Alder",
+                    backwood: "Cedar"},
+                {
+                    id: "5", 
+                    price: "45.00",
+                    builder: "Fender",
+                    model: "Quietude",
+                    type: "acoustic",
+                    topwood: "Sitka",
+                    backwood: "Maple"},
+            ];
+    
+            function search() {
+                    event.preventDefault();
+                let builder = document.getElementById("builder").value;
+                let model = document.getElementById("model").value;
+                let type = document.getElementById("type").value;
+                let topwood = document.getElementById("topwood").value;
+                let backwood = document.getElementById("backwood").value;
+
+                let table = document.getElementById("results");
+                let status = builder + model + type + topwood + backwood != "";
+                table.innerHTML = "";
+                for (let guitar of guitars) {
+                    if (!status || guitar.type.toLocaleLowerCase() == type.toLocaleLowerCase() || guitar.builder.toLocaleLowerCase() == builder.toLocaleLowerCase()|| guitar.model.toLocaleLowerCase() == model.toLocaleLowerCase() || guitar.topwood.toLocaleLowerCase() == topwood.toLocaleLowerCase() || guitar.backwood.toLocaleLowerCase() == backwood.toLocaleLowerCase()) {
+                        let row = document.createElement("tr");
+                        let cell1 = document.createElement("td");
+                        let cell2 = document.createElement("td");
+                        let cell3 = document.createElement("td");
+                        let cell4 = document.createElement("td");
+                        let cell5 = document.createElement("td");
+                        let cell6 = document.createElement("td");
+
+                        let new_price = document.createTextNode(guitar.price);
+                        let new_builder = document.createTextNode(guitar.builder);
+                        let new_model = document.createTextNode(guitar.model);
+                        let new_type = document.createTextNode(guitar.type);
+                        let new_topwood = document.createTextNode(guitar.topwood);
+                        let new_backwood = document.createTextNode(guitar.backwood);
+                        let new_guitar_id = document.createTextNode(guitar.id);
+
+    
+                        cell1.appendChild(new_guitar_id);
+                        cell2.appendChild(new_builder);
+                        cell3.appendChild(new_model);
+                        cell4.appendChild(new_type);
+                        cell5.appendChild(new_topwood);
+                        cell6.appendChild(new_backwood);
+                        row.appendChild(cell1);
+                        row.appendChild(cell2);
+                        row.appendChild(cell3);
+                        row.appendChild(cell4);
+                        row.appendChild(cell5);
+                        row.appendChild(cell6);
+                        table.appendChild(row);
+                        }
+
+                    }
+                }
+
+        </script>
+
+    </body>
+
+</html>
+

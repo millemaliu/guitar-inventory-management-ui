@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+	<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<title>Guitar Inventory - About</title>
+        <link rel="stylesheet" href="/index.css">
+    </head>
+
+    <body>
+
+        <table class = "nav">
+            <tbody>
+                <tr>
+                    <td><a class="heading" href="./index.html">Guitar Inventory Management</a></td>
+                    <td><div class = "nav-left">
+                        <a class="nav-button" href="./about.html">About</a>
+                        <a class="nav-button" href="./add-guitar.html">Add</a>
+                        <a class="nav-button" href="./search.html">Search</a>
+                    </div></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        
+        <div class ="center">
+            <form>
+                <label>Serial Number: </label>
+                <input id="num" /> <br />
+                <label>Price: </label>
+                <input id="price"/><br />
+                <label>Builder: </label>
+                <input id="builder" /><br />
+                <label>Model: </label>
+                <input id="model"/><br />
+                <label>Type: </label>
+                <input id="type"/><br />
+                <label>Topwood: </label>
+                <input id="topwood"/><br />
+                <label>Backwood: </label>
+                <input id="backwood"/><br />
+                <button onclick="addGuitar()">Add the Guitar</button>
+            </form>
+        </div>
+
+
+        <script>
+            async function addGuitar() {
+                let guitar_id = document.getElementById("num");
+                let price = document.getElementById("price");
+                let builder = document.getElementById("builder");
+                let model = document.getElementById("model");
+                let type = document.getElementById("type");
+                let topwood = document.getElementById("topwood");
+                let backwood = document.getElementById("backwood");
+                
+                let guitar = {
+                    id: guitar_id.value, 
+                    price: price.value,
+                    builder: builder.value,
+                    model: model.value,
+                    type: type.value,
+                    topwood: topwood.value,
+                    backwood:backwood.value
+                };
+                alert("You entered " + JSON.stringify(guitar));
+                event.preventDefault();
+
+            }
+
+        </script>
+    </body>
+
+</html>
+
