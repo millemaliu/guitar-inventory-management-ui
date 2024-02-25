@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
     	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     	<title>Guitar Inventory - About</title>
-        <link type="text/css" rel="stylesheet" href="index.css">
+        <link rel="stylesheet" href="/index.css">
     </head>
 
     <body>
@@ -46,26 +46,47 @@
 
 
         <script>
+
             async function addGuitar() {
-                let guitar_id = document.getElementById("num");
-                let price = document.getElementById("price");
-                let builder = document.getElementById("builder");
-                let model = document.getElementById("model");
-                let type = document.getElementById("type");
-                let topwood = document.getElementById("topwood");
-                let backwood = document.getElementById("backwood");
+                let host = "http://localhost:8080";
+
+                event.preventDefault();
+                let guitar_id = document.getElementById("num").value;
+                let price = document.getElementById("price").value;
+                let builder = document.getElementById("builder").value;
+                let model = document.getElementById("model").value;
+                let type = document.getElementById("type").value;
+                let topwood = document.getElementById("topwood").value;
+                let backwood = document.getElementById("backwood").value;
+                if (guitar_id == "" || price == "" || builder == "" || model == "" ||
+                type == "" || topwood == "" || backwood == "") {
+                    alert("You haven't filled all the required fields!");
+                    return;
+                }
                 
                 let guitar = {
-                    id: guitar_id.value, 
-                    price: price.value,
-                    builder: builder.value,
-                    model: model.value,
-                    type: type.value,
-                    topwood: topwood.value,
-                    backwood:backwood.value
+                    id: guitar_id,
+                    price: price,
+                    builder: builder,
+                    model: model,
+                    type: type,
+                    topWood: topwood,
+                    backWood:backwood
                 };
-                alert("You entered " + JSON.stringify(guitar));
-                event.preventDefault();
+                
+
+                let request = {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(guitar)
+                }
+
+                let ask = await fetch(host + "/add", request);
+                console.log(ask);
+                if (ask.ok) alert("The guitar was added to the system.");
+                if (!ask.ok) alert("Something went wrong. Please try again or contact the customer support team.");
 
             }
 
