@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
     	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     	<title>Guitar Inventory - About</title>
-        <link type="text/css" rel="stylesheet" href="index.css">
+        <link rel="stylesheet" href="index.css">
     </head>
 
     <body>
@@ -57,96 +57,86 @@
             
 
         <script>
-            let guitars = [
-                {
-                    id: "1", 
-                    price: "50.00",
-                    builder: "Fender",
-                    model: "Lightening",
-                    type: "acoustic",
-                    topwood: "Mahogany",
-                    backwood: "Maple"},
-                {
-                    id: "2", 
-                    price: "55.00",
-                    builder: "Gibson",
-                    model: "Pretty",
-                    type: "acoustic",
-                    topwood: "Cocobolo",
-                    backwood: "Maple"},
-                {
-                    id: "3", 
-                    price: "60.00",
-                    builder: "Fender",
-                    model: "Crisis",
-                    type: "acoustic",
-                    topwood: "Alder",
-                    backwood: "Cocobolo"},
-                {
-                    id: "4", 
-                    price: "70.00",
-                    builder: "Gibson",
-                    model: "Sleeper",
-                    type: "electric",
-                    topwood: "Alder",
-                    backwood: "Cedar"},
-                {
-                    id: "5", 
-                    price: "45.00",
-                    builder: "Fender",
-                    model: "Quietude",
-                    type: "acoustic",
-                    topwood: "Sitka",
-                    backwood: "Maple"},
-            ];
+            let host = "http://localhost:8080";
+            let guitars = [];
     
-            function search() {
-                    event.preventDefault();
-                let builder = document.getElementById("builder").value;
-                let model = document.getElementById("model").value;
-                let type = document.getElementById("type").value;
-                let topwood = document.getElementById("topwood").value;
-                let backwood = document.getElementById("backwood").value;
+            async function search() {
+                event.preventDefault();
+
+                let builder_v = document.getElementById("builder").value;
+                let model_v = document.getElementById("model").value;
+                let type_v = document.getElementById("type").value;
+                let topwood_v = document.getElementById("topwood").value;
+                let backwood_v = document.getElementById("backwood").value;
+                
+                let search_itself = host + "/search?";
+                if (builder_v != "") search_itself += "builder=" + builder_v + "&";
+                if (model_v != "") search_itself += "model=" + model_v + "&";
+                if (type_v != "") search_itself += "type=" + type_v + "&";
+                if (topwood_v != "") search_itself += "topWood=" + topwood_v + "&";
+                if (backwood_v != "") search_itself += "backWood=" + backwood_v + "&";
+                
+                guitars = await getAll(search_itself.substring(0, search_itself.length - 1));
+                console.log(guitars);
+                if (guitars == null) return;
+
 
                 let table = document.getElementById("results");
-                let status = builder + model + type + topwood + backwood != "";
                 table.innerHTML = "";
                 for (let guitar of guitars) {
-                    if (!status || guitar.type.toLocaleLowerCase() == type.toLocaleLowerCase() || guitar.builder.toLocaleLowerCase() == builder.toLocaleLowerCase()|| guitar.model.toLocaleLowerCase() == model.toLocaleLowerCase() || guitar.topwood.toLocaleLowerCase() == topwood.toLocaleLowerCase() || guitar.backwood.toLocaleLowerCase() == backwood.toLocaleLowerCase()) {
-                        let row = document.createElement("tr");
-                        let cell1 = document.createElement("td");
-                        let cell2 = document.createElement("td");
-                        let cell3 = document.createElement("td");
-                        let cell4 = document.createElement("td");
-                        let cell5 = document.createElement("td");
-                        let cell6 = document.createElement("td");
+                    let row = document.createElement("tr");
+                    let cell1 = document.createElement("td");
+                    let cell2 = document.createElement("td");
+                    let cell3 = document.createElement("td");
+                    let cell4 = document.createElement("td");
+                    let cell5 = document.createElement("td");
+                    let cell6 = document.createElement("td");
 
-                        let new_price = document.createTextNode(guitar.price);
-                        let new_builder = document.createTextNode(guitar.builder);
-                        let new_model = document.createTextNode(guitar.model);
-                        let new_type = document.createTextNode(guitar.type);
-                        let new_topwood = document.createTextNode(guitar.topwood);
-                        let new_backwood = document.createTextNode(guitar.backwood);
-                        let new_guitar_id = document.createTextNode(guitar.id);
+                    let new_price = document.createTextNode(guitar.price);
+                    let new_builder = document.createTextNode(guitar.builder);
+                    let new_model = document.createTextNode(guitar.model);
+                    let new_type = document.createTextNode(guitar.type);
+                    let new_topwood = document.createTextNode(guitar.topwood);
+                    let new_backwood = document.createTextNode(guitar.backwood);
+                    let new_guitar_id = document.createTextNode(guitar.id);
 
-    
-                        cell1.appendChild(new_guitar_id);
-                        cell2.appendChild(new_builder);
-                        cell3.appendChild(new_model);
-                        cell4.appendChild(new_type);
-                        cell5.appendChild(new_topwood);
-                        cell6.appendChild(new_backwood);
-                        row.appendChild(cell1);
-                        row.appendChild(cell2);
-                        row.appendChild(cell3);
-                        row.appendChild(cell4);
-                        row.appendChild(cell5);
-                        row.appendChild(cell6);
-                        table.appendChild(row);
-                        }
+
+                    cell1.appendChild(new_guitar_id);
+                    cell2.appendChild(new_builder);
+                    cell3.appendChild(new_model);
+                    cell4.appendChild(new_type);
+                    cell5.appendChild(new_topwood);
+                    cell6.appendChild(new_backwood);
+                    row.appendChild(cell1);
+                    row.appendChild(cell2);
+                    row.appendChild(cell3);
+                    row.appendChild(cell4);
+                    row.appendChild(cell5);
+                    row.appendChild(cell6);
+                    table.appendChild(row);
 
                     }
                 }
+
+
+
+            async function getAll(search_itself) {
+                let request = {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }   
+                }
+                let response = await fetch(search_itself, request); 
+
+                if (!response.ok) {
+                    alert ("It looks like something went wrong.");
+                    return null;
+                }
+                
+                return response.json();
+
+            }
 
         </script>
 
